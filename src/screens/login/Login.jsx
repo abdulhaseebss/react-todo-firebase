@@ -1,26 +1,33 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { signInWithEmailAndPassword , onAuthStateChanged} from "firebase/auth";
 import {auth} from "../../config/firebaseConfig/FirebaseConfig"
+import UserContext from '../../context/UserContext';
 
 const Login = () => {
   const [email , setEmail] = useState()
   const [password , setPassword] = useState()
+  const { isUser, setIsUser } = useContext(UserContext);
   const navigate = useNavigate()
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      const uid = user.uid;
-      console.log(uid);
-      // ...
-      navigate('/')
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
+  if (isUser) {
+    navigate('/')
+  }else{
+    setIsUser(false)
+  }
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, see docs for a list of available properties
+  //     // https://firebase.google.com/docs/reference/js/auth.user
+  //     const uid = user.uid;
+  //     console.log(uid);
+  //     // ...
+  //     navigate('/')
+  //   } else {
+  //     // User is signed out
+  //     // ...
+  //   }
+  // });
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
